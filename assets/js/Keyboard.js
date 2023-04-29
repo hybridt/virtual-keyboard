@@ -38,5 +38,10 @@ export class Keyboard {
     
       return keyboardNode;
     };
+
+    this.print = (char) => {
+      const textfield = document.querySelector('.textfield');
+      textfield.value += char;
+    };
   }
 }
