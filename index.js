@@ -23,6 +23,10 @@ renderElementsDOM();
 const keyboardNode = document.querySelector('.keyboard');
 const textfield = document.querySelector('.textfield');
 
+// textfield.addEventListener('keydown', (e) => {
+//   e.preventDefault();
+// });
+
 keyboardNode.addEventListener('click', (e) => {
   const clickedTag = e.target.tagName;
   if (clickedTag === 'BUTTON' && e.target.classList.contains('key_normal')) {
@@ -32,6 +36,7 @@ keyboardNode.addEventListener('click', (e) => {
 });
 
 document.body.addEventListener('keydown', (e) => {
+  if (document.activeElement === textfield) return;
   const pressedKey = e.key;
   if (isChar(pressedKey)) {
     keyboard.print(pressedKey, textfield);
@@ -40,8 +45,4 @@ document.body.addEventListener('keydown', (e) => {
   if (pressedKey === 'Backspace') {
     keyboard.pushBackspace(textfield);
   }
-});
-
-textfield.addEventListener('keydown', (e) => {
-  e.preventDefault();
 });

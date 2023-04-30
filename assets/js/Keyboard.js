@@ -45,9 +45,15 @@ export class Keyboard {
     };
 
     this.pushBackspace = (textfield) => {
+      const caretPosition = textfield.selectionStart;
       const value = textfield.value;
       const valueLength = value.length;
-      textfield.value = value.slice(0, valueLength - 1);
+      if (caretPosition > 0) {
+        const stringBeforeCaret = value.slice(0, caretPosition - 1);
+        const stringAfterCaret = value.slice(caretPosition, valueLength);
+        textfield.value = stringBeforeCaret + stringAfterCaret;
+        textfield.selectionStart = stringBeforeCaret.length;
+      }
     };
   }
 }
