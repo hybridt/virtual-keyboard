@@ -1,5 +1,6 @@
 export class Keyboard {
   constructor() {
+    
     this.enKeys = [
       '`', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 'Backspace',
       'Tab', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']', '\\', 'Del',
@@ -39,9 +40,14 @@ export class Keyboard {
       return keyboardNode;
     };
 
-    this.print = (char) => {
-      const textfield = document.querySelector('.textfield');
+    this.print = (char, textfield) => {
       textfield.value += char;
+    };
+
+    this.pushBackspace = (textfield) => {
+      const value = textfield.value;
+      const valueLength = value.length;
+      textfield.value = value.slice(0, valueLength - 1);
     };
   }
 }

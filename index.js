@@ -21,18 +21,27 @@ const isChar = (string) => {
 renderElementsDOM();
 
 const keyboardNode = document.querySelector('.keyboard');
+const textfield = document.querySelector('.textfield');
 
 keyboardNode.addEventListener('click', (e) => {
   const clickedTag = e.target.tagName;
   if (clickedTag === 'BUTTON' && e.target.classList.contains('key_normal')) {
     const char = e.target.textContent;
-    keyboard.print(char);
+    keyboard.print(char, textfield);
   }
 });
 
 document.body.addEventListener('keydown', (e) => {
   const pressedKey = e.key;
   if (isChar(pressedKey)) {
-    keyboard.print(pressedKey);
+    keyboard.print(pressedKey, textfield);
   }
+
+  if (pressedKey === 'Backspace') {
+    keyboard.pushBackspace(textfield);
+  }
+});
+
+textfield.addEventListener('keydown', (e) => {
+  e.preventDefault();
 });
