@@ -5,13 +5,16 @@ const keyboard = new Keyboard();
 const renderElementsDOM = () => {
   const inputWrapper = document.createElement('div');
   const input = document.createElement('textarea');
+  const info = document.createElement('p');
   const keyboardNode = keyboard.buildKeyboard();
 
   inputWrapper.className = 'input-wrapper';
   input.className = 'textfield';
+  info.className = 'info';
+  info.textContent = 'Switch language: Ctrl + Shift | OS: Windows';
 
   inputWrapper.append(input);
-  document.body.append(inputWrapper, keyboardNode);
+  document.body.append(inputWrapper, keyboardNode, info);
 };
 
 const isChar = (string) => {
@@ -23,9 +26,13 @@ renderElementsDOM();
 const keyboardNode = document.querySelector('.keyboard');
 const textfield = document.querySelector('.textfield');
 
-// textfield.addEventListener('keydown', (e) => {
-//   e.preventDefault();
-// });
+window.addEventListener('unload', () => {
+  localStorage.setItem('lang', keyboard.language);
+});
+
+textfield.addEventListener('keydown', (e) => {
+  e.preventDefault();
+});
 
 keyboardNode.addEventListener('click', (e) => {
   if (document.activeElement === textfield) return;
@@ -43,7 +50,7 @@ keyboardNode.addEventListener('click', (e) => {
 });
 
 document.body.addEventListener('keydown', (e) => {
-  if (document.activeElement === textfield) return;
+  // if (document.activeElement === textfield) return;
   const pressedKey = e.key;
   if (isChar(pressedKey)) {
     keyboard.print(pressedKey, textfield);
@@ -51,5 +58,9 @@ document.body.addEventListener('keydown', (e) => {
 
   if (pressedKey === 'Backspace') {
     keyboard.pushBackspace(textfield);
+  }
+
+  if (e.ctrlKey && e.shiftKey) {
+    keyboard.switchLanguage();
   }
 });
