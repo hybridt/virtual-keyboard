@@ -41,7 +41,15 @@ export class Keyboard {
     };
 
     this.print = (char, textfield) => {
-      textfield.value += char;
+      const caretPosition = textfield.selectionStart;
+      const value = textfield.value;
+      const valueLength = value.length;
+      const stringBeforeCaret = value.slice(0, caretPosition);
+      const stringAfterCaret = value.slice(caretPosition, valueLength);
+      const newStringBeforeCaret = stringBeforeCaret + char;
+
+      textfield.value = newStringBeforeCaret + stringAfterCaret;
+      textfield.selectionStart = newStringBeforeCaret.length;
     };
 
     this.pushBackspace = (textfield) => {

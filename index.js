@@ -28,10 +28,17 @@ const textfield = document.querySelector('.textfield');
 // });
 
 keyboardNode.addEventListener('click', (e) => {
+  if (document.activeElement === textfield) return;
   const clickedTag = e.target.tagName;
-  if (clickedTag === 'BUTTON' && e.target.classList.contains('key_normal')) {
-    const char = e.target.textContent;
-    keyboard.print(char, textfield);
+  if (clickedTag === 'BUTTON') {
+    if (e.target.classList.contains('key_normal')) {
+      const char = e.target.textContent;
+      keyboard.print(char, textfield);
+    }
+
+    if (e.target.textContent === 'Backspace') {
+      keyboard.pushBackspace(textfield);
+    }
   }
 });
 
