@@ -1,0 +1,57 @@
+@import "normalize.css";
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-size: 16px;
+  font-family: "Arial", "Helvetica", sans-serif
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.keyboard__row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.key {
+  min-height: 50px;
+  color: #fff;
+  background-color: rgb(51, 51, 51);
+  transition: all 0.5s;
+}
+
+.key.active {
+  background-color: #000;
+}
+
+.key_normal {
+  width: 50px;
+}
+
+.Space,
+.Backspace,
+.Enter {
+  flex-grow: 1;
+}
+
+.ShiftLeft,
+.ShiftRight {
+  flex-grow: 1;
+  width: 90px;
+}
+
+.Tab,
+.Delete,
+.ControlLeft,
+.ControlRight,
+.AltLeft,
+.AltRight {
+  width: 80px;
+}

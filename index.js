@@ -3,11 +3,13 @@ import { Keyboard } from './assets/js/Keyboard.js';
 const keyboard = new Keyboard();
 
 const renderElementsDOM = () => {
+  const container = document.createElement('div');
   const inputWrapper = document.createElement('div');
   const input = document.createElement('textarea');
   const info = document.createElement('p');
   const keyboardNode = keyboard.buildKeyboard();
 
+  container.className = 'container';
   inputWrapper.className = 'input-wrapper';
   input.className = 'textfield';
   input.setAttribute('cols', 50);
@@ -16,7 +18,8 @@ const renderElementsDOM = () => {
   info.textContent = 'Switch language: Ctrl + Shift | OS: Windows';
 
   inputWrapper.append(input);
-  document.body.append(inputWrapper, keyboardNode, info);
+  container.append(inputWrapper, keyboardNode, info);
+  document.body.append(container);
 };
 
 const isChar = (string) => {
@@ -40,7 +43,8 @@ keyboardNode.addEventListener('mousedown', (e) => {
   e.preventDefault();
   const clickedTag = e.target.tagName;
   if (clickedTag === 'BUTTON') {
-    const buttonText = e.target.textContent;
+    const button = e.target;
+    const buttonText = button.textContent;
     if (e.target.classList.contains('key_normal')) {
       const char = e.target.textContent;
       keyboard.print(char, textfield);
@@ -73,20 +77,28 @@ keyboardNode.addEventListener('mousedown', (e) => {
     if (buttonText === 'Shift' && !keyboard.isShiftPressed) {
       keyboard.pressShift();
     }
+
+    button.classList.add('active');
   }
 });
 
 keyboardNode.addEventListener('mouseup', (e) => {
-  const buttonText = e.target.textContent;
+  const button = e.target;
+  const buttonText = button.textContent;
   if (buttonText === 'Shift') {
     keyboard.unpressShift();
+  }
+
+  if (buttonText !== 'Caps Lock' || !keyboard.isCapsEnabled) {
+    button.classList.remove('active');
   }
 });
 
 document.body.addEventListener('keydown', (e) => {
   e.preventDefault();
   const keyCode = e.code;
-  const keyText = document.querySelector(`.${keyCode}`)?.textContent;
+  const keyNode = document.querySelector((`.${keyCode}`));
+  const keyText = keyNode?.textContent;
   if (!keyText) return;
 
   if (isChar(keyText)) {
@@ -124,10 +136,21 @@ document.body.addEventListener('keydown', (e) => {
   if (e.shiftKey && !keyboard.isShiftPressed) {
     keyboard.pressShift();
   }
+
+  if (!e.repeat) {
+    keyNode.classList.add('active');
+  }
 });
 
 document.body.addEventListener('keyup', (e) => {
+  const keyCode = e.code;
+  const keyNode = document.querySelector((`.${keyCode}`));
+
   if (e.key === 'Shift') {
     keyboard.unpressShift();
+  }
+
+  if (keyCode !== 'CapsLock' || !keyboard.isCapsEnabled) {
+    keyNode.classList.remove('active');
   }
 });
