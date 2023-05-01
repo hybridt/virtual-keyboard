@@ -64,7 +64,7 @@ document.body.addEventListener('keydown', (e) => {
   // if (document.activeElement === textfield) return;
   const keyCode = e.code;
   const keyText = document.querySelector(`.${keyCode}`).textContent;
-  console.log(keyText);
+  // console.log(keyText);
 
   if (isChar(keyText)) {
     keyboard.print(keyText, textfield);
@@ -82,7 +82,18 @@ document.body.addEventListener('keydown', (e) => {
     keyboard.switchLanguage();
   }
 
-  if (keyCode === 'CapsLock') {
+  if (keyCode === 'CapsLock' && !e.repeat) {
     keyboard.pushCapslock();
+  }
+
+  if (e.shiftKey && !keyboard.isShiftPressed) {
+    keyboard.pressShift();
+  }
+
+});
+
+document.body.addEventListener('keyup', (e) => {
+  if (e.key === 'Shift') {
+    keyboard.unpressShift();
   }
 });

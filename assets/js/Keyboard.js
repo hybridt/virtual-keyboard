@@ -2,6 +2,7 @@ export class Keyboard {
   constructor() {
     this.language = 'en';
     this.isCapsEnabled = false;
+    this.isShiftPressed = false;
 
     this.keysLayout = [
       ['Backquote', 'Digit1', 'Digit2', 'Digit3', 'Digit4', 'Digit5', 'Digit6', 'Digit7', 'Digit8', 'Digit9', 'Digit0', 'Minus', 'Equal', 'Backspace'],
@@ -127,6 +128,16 @@ export class Keyboard {
       for (const key of keys) {
         key.textContent = key.textContent.toUpperCase();
       }
+    };
+
+    this.pressShift = () => {
+      this.isShiftPressed = true;
+      this.pushCapslock();
+    };
+
+    this.unpressShift = () => {
+      this.isShiftPressed = false;
+      this.pushCapslock();
     };
 
     this.pushCapslock = () => {
