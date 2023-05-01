@@ -37,23 +37,24 @@ textfield.addEventListener('keydown', (e) => {
 });
 
 keyboardNode.addEventListener('click', (e) => {
-  if (document.activeElement === textfield) return;
+  // if (document.activeElement === textfield) return;
   const clickedTag = e.target.tagName;
   if (clickedTag === 'BUTTON') {
+    const buttonText = e.target.textContent;
     if (e.target.classList.contains('key_normal')) {
       const char = e.target.textContent;
       keyboard.print(char, textfield);
     }
 
-    if (e.target.textContent === 'Backspace') {
+    if (buttonText === 'Backspace') {
       keyboard.pushBackspace(textfield);
     }
 
-    if (e.target.textContent === 'Del') {
+    if (buttonText === 'Del') {
       keyboard.pushDelete(textfield);
     }
 
-    if (e.target.textContent === 'Caps Lock') {
+    if (buttonText === 'Caps Lock') {
       keyboard.pushCapslock();
     }
   }
@@ -61,18 +62,19 @@ keyboardNode.addEventListener('click', (e) => {
 
 document.body.addEventListener('keydown', (e) => {
   // if (document.activeElement === textfield) return;
-  const pressedKey = e.key;
+  const keyCode = e.code;
+  const keyText = document.querySelector(`.${keyCode}`).textContent;
+  console.log(keyText);
 
-  console.log(e.code);
-  if (isChar(pressedKey)) {
-    keyboard.print(pressedKey, textfield);
+  if (isChar(keyText)) {
+    keyboard.print(keyText, textfield);
   }
 
-  if (pressedKey === 'Backspace') {
+  if (keyCode === 'Backspace') {
     keyboard.pushBackspace(textfield);
   }
 
-  if (pressedKey === 'Delete') {
+  if (keyCode === 'Delete') {
     keyboard.pushDelete(textfield);
   }
 
@@ -80,7 +82,7 @@ document.body.addEventListener('keydown', (e) => {
     keyboard.switchLanguage();
   }
 
-  if (pressedKey === 'CapsLock') {
+  if (keyCode === 'CapsLock') {
     keyboard.pushCapslock();
   }
 });

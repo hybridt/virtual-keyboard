@@ -2,6 +2,14 @@ export class Keyboard {
   constructor() {
     this.language = 'en';
     this.isCapsEnabled = false;
+
+    this.keysLayout = [
+      ['Backquote', 'Digit1', 'Digit2', 'Digit3', 'Digit4', 'Digit5', 'Digit6', 'Digit7', 'Digit8', 'Digit9', 'Digit0', 'Minus', 'Equal', 'Backspace'],
+      ['Tab', 'KeyQ', 'KeyW', 'KeyE', 'KeyR', 'KeyT', 'KeyY', 'KeyU', 'KeyI', 'KeyO', 'KeyP', 'BracketLeft', 'BracketRight', 'Backslash', 'Delete'],
+      ['CapsLock', 'KeyA', 'KeyS', 'KeyD', 'KeyF', 'KeyG', 'KeyH', 'KeyJ', 'KeyK', 'KeyL', 'Semicolon', 'Quote', 'Enter'],
+      ['ShiftLeft', 'KeyZ', 'KeyX', 'KeyC', 'KeyV', 'KeyB', 'KeyN', 'KeyM', 'Comma', 'Period', 'Slash', 'ArrowUp', 'ShiftRight'],
+      ['ControlLeft', 'MetaLeft', 'AltLeft', 'Space', 'AltRight', 'ControlRight', 'ArrowLeft', 'ArrowDown', 'ArrowRight'],
+    ];
     
     this.enKeys = [
       ['`', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 'Backspace'],
@@ -28,21 +36,25 @@ export class Keyboard {
       const keys = (this.language === 'en') ? this.enKeys : this.ruKeys;
      
       keyboardNode.className = 'keyboard';
-      for (const row of keys) {
+      
+      for (let row = 0; row < keys.length; row++) {
         const keyboardRow = document.createElement('div');
         keyboardRow.className = 'keyboard__row';
-        for (const key of row) {
+        for (let key = 0; key < keys[row].length; key++) {
           const keyNode = document.createElement('button');
-          keyNode.textContent = key;
-          if (key.length === 1 && key !== '⏴' && key !== '▲' && key !== '⏷' && key !== '⏵') {
-            keyNode.className = 'key key_normal';
+          const keyCode = this.keysLayout[row][key];
+          const keyText = keys[row][key];
+          keyNode.textContent = keyText;
+          if (keyText.length === 1 && keyText !== '⏴' && keyText !== '▲' && keyText !== '⏷' && keyText !== '⏵') {
+            keyNode.className = `key key_normal ${keyCode}`;
           } else {
-            keyNode.className = 'key key_special';
+            keyNode.className = `key key_special ${keyCode}`;
           }
           keyboardRow.append(keyNode);
         }
         keyboardNode.append(keyboardRow);
       }
+
       return keyboardNode;
     };
 
@@ -86,18 +98,21 @@ export class Keyboard {
     };
 
     this.switchLanguage = () => {
-      if (this.language === 'en') {
-        this.language = 'ru';
-      } else {
-        this.language = 'en';
-      }
+      this.language = (this.language === 'en') ? 'ru' : 'en';
       const keys = (this.language === 'en') ? this.enKeys : this.ruKeys;
       const rows = document.querySelectorAll('.keyboard__row');
 
       for (let row = 0; row < rows.length; row++) {
         const buttons = rows[row].children;
         for (let btn = 0; btn < buttons.length; btn++) {
-          buttons[btn].textContent = keys[row][btn];
+          const buttonText = buttons[btn].textContent;
+          if (buttonText.length === 1) {
+            let newButtonText = keys[row][btn];
+            if (this.isCapsEnabled) {
+              newButtonText = newButtonText.toUpperCase();
+            }
+            buttons[btn].textContent = newButtonText;
+          }
         }
       }
     };
