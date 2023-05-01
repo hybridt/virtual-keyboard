@@ -145,6 +145,7 @@ document.body.addEventListener('keydown', (e) => {
 document.body.addEventListener('keyup', (e) => {
   const keyCode = e.code;
   const keyNode = document.querySelector((`.${keyCode}`));
+  if (!keyNode) return;
 
   if (e.key === 'Shift') {
     keyboard.unpressShift();
