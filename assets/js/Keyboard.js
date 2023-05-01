@@ -4,6 +4,30 @@ export class Keyboard {
     this.isCapsEnabled = false;
     this.isShiftPressed = false;
 
+    this.specChars = {
+      'Backquote': ['~', 'Ё'],
+      'Digit1': ['!', '!'],
+      'Digit2': ['@', '"'],
+      'Digit3': ['#', '№'],
+      'Digit4': ['$', ';'],
+      'Digit5': ['%', '%'],
+      'Digit6': ['^', ':'],
+      'Digit7': ['&', '?'],
+      'Digit8': ['*', '*'],
+      'Digit9': ['(', '('],
+      'Digit0': [')', ')'],
+      'Minus': ['_', '_'],
+      'Equal': ['+', '+'],
+      'BracketLeft': ['{', 'Х'],
+      'BracketRight': ['}', 'Ъ'],
+      'Backslash': ['|', '/'],
+      'Semicolon': [':', 'Ж'],
+      'Quote': ['"', 'Э'],
+      'Comma': ['<', 'Б'],
+      'Period': ['>', 'Ю'],
+      'Slash': ['?', ','],
+    };
+
     this.keysLayout = [
       ['Backquote', 'Digit1', 'Digit2', 'Digit3', 'Digit4', 'Digit5', 'Digit6', 'Digit7', 'Digit8', 'Digit9', 'Digit0', 'Minus', 'Equal', 'Backspace'],
       ['Tab', 'KeyQ', 'KeyW', 'KeyE', 'KeyR', 'KeyT', 'KeyY', 'KeyU', 'KeyI', 'KeyO', 'KeyP', 'BracketLeft', 'BracketRight', 'Backslash', 'Delete'],
@@ -59,6 +83,25 @@ export class Keyboard {
       return keyboardNode;
     };
 
+    this.updateKeys = () => {
+      const keys = (this.language === 'en') ? this.enKeys : this.ruKeys;
+      const rows = document.querySelectorAll('.keyboard__row');
+
+      for (let row = 0; row < rows.length; row++) {
+        const buttons = rows[row].children;
+        for (let btn = 0; btn < buttons.length; btn++) {
+          const buttonText = buttons[btn].textContent;
+          if (buttonText.length === 1) {
+            let newButtonText = keys[row][btn];
+            if (this.isCapsEnabled) {
+              newButtonText = newButtonText.toUpperCase();
+            }
+            buttons[btn].textContent = newButtonText;
+          }
+        }
+      }
+    };
+
     this.print = (char, textfield) => {
       const caretPosition = textfield.selectionStart;
       const value = textfield.value;
@@ -100,22 +143,7 @@ export class Keyboard {
 
     this.switchLanguage = () => {
       this.language = (this.language === 'en') ? 'ru' : 'en';
-      const keys = (this.language === 'en') ? this.enKeys : this.ruKeys;
-      const rows = document.querySelectorAll('.keyboard__row');
-
-      for (let row = 0; row < rows.length; row++) {
-        const buttons = rows[row].children;
-        for (let btn = 0; btn < buttons.length; btn++) {
-          const buttonText = buttons[btn].textContent;
-          if (buttonText.length === 1) {
-            let newButtonText = keys[row][btn];
-            if (this.isCapsEnabled) {
-              newButtonText = newButtonText.toUpperCase();
-            }
-            buttons[btn].textContent = newButtonText;
-          }
-        }
-      }
+      this.updateKeys();
     };
 
     this.switchToLowerCase = (keys) => {
@@ -133,11 +161,18 @@ export class Keyboard {
     this.pressShift = () => {
       this.isShiftPressed = true;
       this.pushCapslock();
+
+      const charIndex = (this.language === 'en') ? 0 : 1;
+      for (const char in this.specChars) {
+        const keyNode = document.querySelector(`.${char}`);
+        keyNode.textContent = this.specChars[char][charIndex];
+      }
     };
 
     this.unpressShift = () => {
       this.isShiftPressed = false;
-      this.pushCapslock();
+      this.isCapsEnabled = !this.isCapsEnabled;
+      this.updateKeys();
     };
 
     this.pushSpace = (textfield) => {
