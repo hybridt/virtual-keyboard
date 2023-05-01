@@ -10,6 +10,8 @@ const renderElementsDOM = () => {
 
   inputWrapper.className = 'input-wrapper';
   input.className = 'textfield';
+  input.setAttribute('cols', 50);
+  input.setAttribute('rows', 10);
   info.className = 'info';
   info.textContent = 'Switch language: Ctrl + Shift | OS: Windows';
 
@@ -46,12 +48,22 @@ keyboardNode.addEventListener('click', (e) => {
     if (e.target.textContent === 'Backspace') {
       keyboard.pushBackspace(textfield);
     }
+
+    if (e.target.textContent === 'Del') {
+      keyboard.pushDelete(textfield);
+    }
+
+    if (e.target.textContent === 'Caps Lock') {
+      keyboard.pushCapslock();
+    }
   }
 });
 
 document.body.addEventListener('keydown', (e) => {
   // if (document.activeElement === textfield) return;
   const pressedKey = e.key;
+
+  console.log(e.code);
   if (isChar(pressedKey)) {
     keyboard.print(pressedKey, textfield);
   }
@@ -60,7 +72,15 @@ document.body.addEventListener('keydown', (e) => {
     keyboard.pushBackspace(textfield);
   }
 
-  if (e.ctrlKey && e.shiftKey) {
+  if (pressedKey === 'Delete') {
+    keyboard.pushDelete(textfield);
+  }
+
+  if (e.ctrlKey && e.shiftKey || e.metaKey && e.shiftKey) {
     keyboard.switchLanguage();
+  }
+
+  if (pressedKey === 'CapsLock') {
+    keyboard.pushCapslock();
   }
 });

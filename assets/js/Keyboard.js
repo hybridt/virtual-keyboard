@@ -1,6 +1,7 @@
 export class Keyboard {
   constructor() {
     this.language = 'en';
+    this.isCapsEnabled = false;
     
     this.enKeys = [
       ['`', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 'Backspace'],
@@ -71,6 +72,19 @@ export class Keyboard {
       }
     };
 
+    this.pushDelete = (textfield) => {
+      const caretPosition = textfield.selectionStart;
+      const value = textfield.value;
+      const valueLength = value.length;
+      if (caretPosition < valueLength) {
+        const stringBeforeCaret = value.slice(0, caretPosition);
+        const stringAfterCaret = value.slice(caretPosition + 1, valueLength);
+        textfield.value = stringBeforeCaret + stringAfterCaret;
+        textfield.selectionStart = stringBeforeCaret.length;
+        textfield.selectionEnd = textfield.selectionStart;
+      }
+    };
+
     this.switchLanguage = () => {
       if (this.language === 'en') {
         this.language = 'ru';
@@ -86,6 +100,29 @@ export class Keyboard {
           buttons[btn].textContent = keys[row][btn];
         }
       }
+    };
+
+    this.switchToLowerCase = (keys) => {
+      for (const key of keys) {
+        key.textContent = key.textContent.toLowerCase();
+      }
+    };
+
+    this.switchToUpperCase = (keys) => {
+      for (const key of keys) {
+        key.textContent = key.textContent.toUpperCase();
+      }
+    };
+
+    this.pushCapslock = () => {
+      const keys = document.querySelectorAll('.key_normal');
+
+      if (this.isCapsEnabled) {
+        this.switchToLowerCase(keys);
+      } else {
+        this.switchToUpperCase(keys);
+      }
+      this.isCapsEnabled = !this.isCapsEnabled;
     };
   }
 }
