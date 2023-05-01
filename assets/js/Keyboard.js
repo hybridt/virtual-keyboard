@@ -17,7 +17,7 @@ export class Keyboard {
       ['Tab', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']', '\\', 'Del'],
       ['Caps Lock', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', '\'', 'Enter'],
       ['Shift', 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '/', '▲', 'Shift'],
-      ['Ctrl', 'Win', 'Alt', 'Space', 'Alt', 'Ctrl', '⏴', '⏷', '⏵'],
+      ['Ctrl', 'Win', 'Alt', 'Space', 'Alt', 'Ctrl', '◄', '▼', '►'],
     ];
 
     this.ruKeys = [
@@ -25,7 +25,7 @@ export class Keyboard {
       ['Tab', 'й', 'ц', 'у', 'к', 'е', 'н', 'г', 'ш', 'щ', 'з', 'х', 'ъ', '\\', 'Del'],
       ['Caps Lock', 'ф', 'ы', 'в', 'а', 'п', 'р', 'о', 'л', 'д', 'ж', 'э', 'Enter'],
       ['Shift', 'я', 'ч', 'с', 'м', 'и', 'т', 'ь', 'б', 'ю', '.', '▲', 'Shift'],
-      ['Ctrl', 'Win', 'Alt', 'Space', 'Alt', 'Ctrl', '⏴', '⏷', '⏵'],
+      ['Ctrl', 'Win', 'Alt', 'Space', 'Alt', 'Ctrl', '◄', '▼', '►'],
     ];
 
     this.buildKeyboard = () => {
@@ -46,7 +46,7 @@ export class Keyboard {
           const keyCode = this.keysLayout[row][key];
           const keyText = keys[row][key];
           keyNode.textContent = keyText;
-          if (keyText.length === 1 && keyText !== '⏴' && keyText !== '▲' && keyText !== '⏷' && keyText !== '⏵') {
+          if (keyText.length === 1) {
             keyNode.className = `key key_normal ${keyCode}`;
           } else {
             keyNode.className = `key key_special ${keyCode}`;
@@ -138,6 +138,18 @@ export class Keyboard {
     this.unpressShift = () => {
       this.isShiftPressed = false;
       this.pushCapslock();
+    };
+
+    this.pushSpace = (textfield) => {
+      this.print(' ', textfield);
+    };
+
+    this.pushTab = (textfield) => {
+      this.print('    ', textfield);
+    };
+
+    this.pushEnter = (textfield) => {
+      this.print('\n', textfield);
     };
 
     this.pushCapslock = () => {

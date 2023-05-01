@@ -36,14 +36,26 @@ textfield.addEventListener('keydown', (e) => {
   e.preventDefault();
 });
 
-keyboardNode.addEventListener('click', (e) => {
-  // if (document.activeElement === textfield) return;
+keyboardNode.addEventListener('mousedown', (e) => {
+  e.preventDefault();
   const clickedTag = e.target.tagName;
   if (clickedTag === 'BUTTON') {
     const buttonText = e.target.textContent;
     if (e.target.classList.contains('key_normal')) {
       const char = e.target.textContent;
       keyboard.print(char, textfield);
+    }
+
+    if (buttonText === 'Space') {
+      keyboard.pushSpace(textfield);
+    }
+
+    if (buttonText === 'Tab') {
+      keyboard.pushTab(textfield);
+    }
+
+    if (buttonText === 'Enter') {
+      keyboard.pushEnter(textfield);
     }
 
     if (buttonText === 'Backspace') {
@@ -57,17 +69,40 @@ keyboardNode.addEventListener('click', (e) => {
     if (buttonText === 'Caps Lock') {
       keyboard.pushCapslock();
     }
+    
+    if (buttonText === 'Shift' && !keyboard.isShiftPressed) {
+      keyboard.pressShift();
+    }
+  }
+});
+
+keyboardNode.addEventListener('mouseup', (e) => {
+  const buttonText = e.target.textContent;
+  if (buttonText === 'Shift') {
+    keyboard.unpressShift();
   }
 });
 
 document.body.addEventListener('keydown', (e) => {
-  // if (document.activeElement === textfield) return;
+  e.preventDefault();
   const keyCode = e.code;
-  const keyText = document.querySelector(`.${keyCode}`).textContent;
-  // console.log(keyText);
+  const keyText = document.querySelector(`.${keyCode}`)?.textContent;
+  if (!keyText) return;
 
   if (isChar(keyText)) {
     keyboard.print(keyText, textfield);
+  }
+
+  if (keyCode === 'Space') {
+    keyboard.pushSpace(textfield);
+  }
+
+  if (keyCode === 'Tab') {
+    keyboard.pushTab(textfield);
+  }
+
+  if (keyCode === 'Enter') {
+    keyboard.pushEnter(textfield);
   }
 
   if (keyCode === 'Backspace') {
@@ -89,7 +124,6 @@ document.body.addEventListener('keydown', (e) => {
   if (e.shiftKey && !keyboard.isShiftPressed) {
     keyboard.pressShift();
   }
-
 });
 
 document.body.addEventListener('keyup', (e) => {
